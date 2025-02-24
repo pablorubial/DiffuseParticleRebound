@@ -23,8 +23,7 @@ class Problem:
         """
         for i in range(self.n_particles):
             y_init = np.random.uniform(self.tol, self.channel.D - self.tol)
-            # Assuming Particle constructor: Particle(id, x, y, Vx, Vy)
-            p = Particle(i, 0, y_init, self.Vx, self.Vy)
+            p = Particle(0, y_init, self.Vx, self.Vy)
             self.particles.append(p)
     
     def simulate_particle(self, particle):

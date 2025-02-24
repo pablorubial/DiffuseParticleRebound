@@ -1,13 +1,13 @@
 import numpy as np
 class Particle:
-    def __init__(self, n, x, y, Vx, Vy):
+    def __init__(self, x, y, Vx, Vy):
         self.x = x # intial x-coordinate of the particles
         self.y = y # initial y-coordinate of the particles
-        self.Vx = Vx # x-component of the velocity of the particles
-        self.Vy = Vy # y-component of the velocity of the particles
+        self.Vx = Vx # x-component of the velocity of the particles at the initial time
+        self.Vy = Vy # y-component of the velocity of the particles at the initial time
         self.time = [] # Time taken by the particle to follow each trajectory
         self.trayectory = [(x, y)] # Array of the particle's position
-        self.velocities = [(Vx, Vy)] # Array of the particle's velocity
+        self.velocities = [(Vx, Vy)] # Array of the particle's velocity at each position
         self.out = False # Boolean variable to check if the particle left the domain
     
     def update_velocity_after_rebound(self, channel, theta):
