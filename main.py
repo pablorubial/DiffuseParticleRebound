@@ -14,7 +14,7 @@ from channel import Channel
 from problem import Problem  
 from utils import  *  
 
-
+# Define the channel object
 channel = Channel(0.7, 1, 0.15, 0.5)
 
 # Define simulation parameters.
@@ -31,9 +31,10 @@ problem.distribute_initial_particles()
 # Run the simulation
 problem.run_simulation()
 
+# Compute the flow particles rate
 print(f"Flow rate: {problem.compute_particles_flow_rate_interarrival():.2f} particles per second")
 
-# visualize_simulation(out_particles[np.argmax(times_per_particle)], channel, dt_sim=0.15, scale_factor=100)
+# visualize_simulation
 visualize_simulation_all_particles(problem.channel, problem.particles)
 
 

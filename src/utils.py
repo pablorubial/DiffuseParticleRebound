@@ -8,31 +8,30 @@ def interpolate_trayectory(particle, dt_sim=0.25):
     Interpolates a piecewise-linear trayectory based on key particle.trayectory and segment durations.
     """
     traj_segments = []
-    t0 = 0.0
-    for i in range(len(particle.time)):
+    t0 = 0.0 # Initial time
+    for i in range(len(particle.time)): # Loop over times
         start = np.array(particle.trayectory[i])
         end = np.array(particle.trayectory[i+1])
         T = particle.time[i]
         # Ensure at least 2 points per segment.
         n_frames = max(2, int(np.ceil(T / dt_sim)))
-        t_segment = np.linspace(t0, t0 + T, n_frames)
-        x_segment = np.linspace(start[0], end[0], n_frames)
-        y_segment = np.linspace(start[1], end[1], n_frames)
-        seg = np.column_stack((t_segment, x_segment, y_segment))
-        traj_segments.append(seg)
-        t0 += T
-    traj = np.concatenate(traj_segments, axis=0)
+        t_segment = np.linspace(t0, t0 + T, n_frames) # Time points for the segment
+        x_segment = np.linspace(start[0], end[0], n_frames) # Linear interpolation of x
+        y_segment = np.linspace(start[1], end[1], n_frames) # Linear interpolation of y
+        seg = np.column_stack((t_segment, x_segment, y_segment)) # Combine time, x, and y
+        traj_segments.append(seg) # Append the segment to the list
+        t0 += T # Update the initial time for the next segment
+    traj = np.concatenate(traj_segments, axis=0) # Combine all segments into a single array
     return traj
  
-def visualize_simulation_single_particle(particle, channel, dt_sim=0.15, scale_factor=100):
+def visualize_simulation_single_particle(particle, channel, dt_sim=0.15):
         """
         Animate the trayectory of a single particle..
         """
        
         smooth_traj = interpolate_trayectory(particle, dt_sim=dt_sim)
         
-        # Use the channel's visualization method to get figure and axis.
-        # Assume channel.visualize(False) returns a valid (fig, ax) tuple.
+        # Use the channel's visualization method to get background figure
         fig, ax = channel.visualize(False)
         # Create a marker for the particle.
         particle_marker, = ax.plot([], [], 'bo', markersize=8)
@@ -48,13 +47,11 @@ def visualize_simulation_single_particle(particle, channel, dt_sim=0.15, scale_f
             return (particle_marker,)
         
         frames = range(len(smooth_traj))
-        interval = dt_sim * scale_factor  # Convert simulation seconds to animation ms.
         ani = FuncAnimation(fig, update, frames=frames, init_func=init,
-                            blit=True, interval=interval)
+                            blit=True)
         # Save the animation as a GIF using PillowWriter.
-        writer = PillowWriter(fps=10) 
-        ani.save("./images/simulation.gif", writer=writer)
-        print("Animation saved as simulation.gif")
+        # writer = PillowWriter() 
+        # ani.save("./images/simulation.gif", writer=writer)
         plt.show()
 
 def visualize_simulation_all_particles(channel, particles):
@@ -104,8 +101,8 @@ def visualize_simulation_all_particles(channel, particles):
                         blit=True)
     
     # # Optionally, save the animation as a GIF:
-    writer = PillowWriter()
-    ani.save("./images/all_particles_simulation.gif", writer=writer)
+    # writer = PillowWriter()
+    # ani.save("./images/all_particles_simulation.gif", writer=writer)
     
     plt.show()
 
